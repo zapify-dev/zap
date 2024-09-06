@@ -31,8 +31,15 @@ describe('ERC20 functions', () => {
       '0x1a9C8182C09F50C8318d769245beA52c32BE35BC',
       '0x47173B170C64d16393a52e6C480b3Ad8c302ba1e',
     ]);
-    expect(balances[0].result).toBeGreaterThan(1000);
-    expect(balances[1].result).toBeGreaterThan(1000);
+    expect(balances[0]).toBeGreaterThan(1000);
+    expect(balances[1]).toBeGreaterThan(1000);
+
+    const balances2 = await uni.balancesOf.call(
+      ['0x1a9C8182C09F50C8318d769245beA52c32BE35BC', '0x47173B170C64d16393a52e6C480b3Ad8c302ba1e'],
+      true,
+    );
+    expect(balances2[0].result).toBeGreaterThan(1000);
+    expect(balances2[1].result).toBeGreaterThan(1000);
   });
 
   it('tokenInfo should return the correct token info (name, symbol, decimals, total supply)', async () => {

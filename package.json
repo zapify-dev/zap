@@ -1,6 +1,6 @@
 {
-  "name": "zapify",
-  "version": "0.1.0",
+  "name": "@zapify-dev/zap",
+  "version": "0.1.3",
   "description": "Zap into Ethereum: Fast, Efficient, Simple.",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,7 +18,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "viem": "^2.20.1"
+    "viem": "^2.21.2"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^2.0.5",

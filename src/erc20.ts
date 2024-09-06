@@ -1,4 +1,7 @@
 import { Address, erc20Abi, getContract, PublicClient, WalletClient } from 'viem';
+import { ReadResult } from '@/types/result';
+
+type BalancesOfReturn<T extends boolean> = T extends true ? ReadResult<bigint>[] : bigint[];
 
 export function erc20(address: Address, client: PublicClient | { public: PublicClient; wallet: WalletClient }) {
   const publicClient = 'public' in client ? client.public : client;
@@ -85,10 +88,16 @@ export function erc20(address: Address, client: PublicClient | { public: PublicC
 
     balancesOf: {
       contract: (addresses: Address[]) => addresses.map((address) => reads.balanceOf.contract(address)),
-      call: async (addresses: Address[]) => {
+      call: async <T extends boolean = false>(addresses: Address[], raw?: T): Promise<BalancesOfReturn<T>> => {
         const contracts = addresses.map((address) => reads.balanceOf.contract(address));
-        // @ts-ignore
-        return await publicClient.multicall({ contracts });
+        const results = await publicClient.multicall({ contracts });
+        if (raw) {
+          return results as BalancesOfReturn<T>;
+        }
+
+        return results.map((result) =>
+          result.status === 'success' && result.result !== undefined ? result.result : 0n,
+        ) as BalancesOfReturn<T>;
       },
     },
 
